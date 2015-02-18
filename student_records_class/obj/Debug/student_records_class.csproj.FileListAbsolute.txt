@@ -1,6 +1,6 @@
 C:\Users\brent\Documents\c#_exercises\student_records_class\student_records_class\bin\Debug\student_records_class.exe.config
 C:\Users\brent\Documents\c#_exercises\student_records_class\student_records_class\bin\Debug\student_records_class.exe
 C:\Users\brent\Documents\c#_exercises\student_records_class\student_records_class\bin\Debug\student_records_class.pdb
-C:\Users\brent\Documents\c#_exercises\student_records_class\student_records_class\obj\Debug\student_records_class.csprojResolveAssemblyReference.cache
 C:\Users\brent\Documents\c#_exercises\student_records_class\student_records_class\obj\Debug\student_records_class.exe
 C:\Users\brent\Documents\c#_exercises\student_records_class\student_records_class\obj\Debug\student_records_class.pdb
+C:\Users\brent\Documents\c#_exercises\student_records_class\student_records_class\obj\Debug\student_records_class.csprojResolveAssemblyReference.cache
