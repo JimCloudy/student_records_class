@@ -10,8 +10,7 @@ namespace student_records_class
     {
         static void Main(string[] args)
         {
-            Student[] students = new Student[20];
-            int itemCount = 0;
+            Student_Grades student_grades = new Student_Grades();
 
             string selection = "";
 
@@ -23,23 +22,23 @@ namespace student_records_class
 
                 switch (selection)
                 {
-                    case "1": addStudent(students, ref itemCount);
+                    case "1": addStudent(student_grades);
                         break;
-                    case "2": deleteStudent(students, ref itemCount);
+                    case "2": deleteStudent(student_grades);
                         break;
-                    case "3": updateStudent(students, itemCount);
+                    case "3": updateStudent(student_grades);
                         break;
-                    case "4": viewAllStudents(students, itemCount);
+                    case "4": viewAllStudents(student_grades);
                         break;
-                    case "5": averageScore(students, itemCount);
+                    case "5": averageScore(student_grades);
                         break;
-                    case "6": maxTotalScore(students, itemCount);
+                    case "6": maxTotalScore(student_grades);
                         break;
-                    case "7": minTotalScore(students, itemCount);
+                    case "7":minTotalScore(student_grades);
                         break;
-                    case "8": viewStudent(students, itemCount);
+                    case "8": viewStudent(student_grades);
                         break;
-                    case "9": bubbleSortDesc(students, itemCount);
+                    case "9": sortStudents(student_grades);
                         break;
                     case "x": break;
                     default: Console.WriteLine("Your selection is not valid: {0}", selection);
@@ -80,13 +79,8 @@ namespace student_records_class
             Console.WriteLine("Enter Your Choice: ");
         }
 
-        static void addStudent(Student[] st, ref int i)
+        static void addStudent(Student_Grades studGrades)
         {
-            if (i > 19)
-            {
-                return;
-            }
-
             Console.WriteLine("========================================================");
             Console.WriteLine();
             Console.WriteLine();
@@ -112,12 +106,11 @@ namespace student_records_class
             Console.WriteLine("Enter Student's Final Score: ");
             float final = float.Parse(Console.ReadLine());
 
-            st[i] = new Student(id,name,sex,quiz1,quiz2,assignment,midterm,final);
+            studGrades.addStudent(id, name, sex, quiz1, quiz2, assignment, midterm, final);
 
-            i++;
         }
 
-        static void viewAllStudents(Student[] stud, int count)
+        static void viewAllStudents(Student_Grades studentGrades)
         {
             Console.WriteLine("========================================================");
             Console.WriteLine();
@@ -127,22 +120,12 @@ namespace student_records_class
             Console.WriteLine();
             Console.WriteLine("========================================================");
             Console.WriteLine();
-            for (int x = 0; x < count; x++)
-            {
-                Console.WriteLine("Info For Student ID: {0}", stud[x].Id);
-                Console.WriteLine("\tNAME: {0}", stud[x].Name);
-                Console.WriteLine("\tSEX: {0}", stud[x].Sex);
-                Console.WriteLine("\tQUIZ 1 SCORE: {0}", stud[x].Quiz1);
-                Console.WriteLine("\tQUIZ 2 SCORE: {0}", stud[x].Quiz2);
-                Console.WriteLine("\tASSIGNMENT SCORE: {0}", stud[x].Assignment);
-                Console.WriteLine("\tMID-TERM SCORE: {0}", stud[x].Midterm);
-                Console.WriteLine("\tFINAL SCORE: {0}", stud[x].Final);
-                Console.WriteLine("\tTOTAL SCORE: {0}", stud[x].Total);
-                Console.WriteLine();
-            }
+
+            studentGrades.showAllStudents();
+            
         }
 
-        static void viewStudent(Student[] stud, int count)
+        static void viewStudent(Student_Grades studentGrades)
         {
             Console.WriteLine("========================================================");
             Console.WriteLine();
@@ -154,24 +137,17 @@ namespace student_records_class
             Console.WriteLine();
             Console.WriteLine("Enter Student ID: ");
             string id = Console.ReadLine();
-            int x = findIndex(stud, id, count);
-            if (x == -1)
+            if (!studentGrades.findStudent(id))
             {
+                Console.WriteLine("Student Not Found: {0}", id);
                 return;
             }
-            Console.WriteLine("Info For Student ID: {0}", stud[x].Id);
-            Console.WriteLine("\tNAME: {0}", stud[x].Name);
-            Console.WriteLine("\tSEX: {0}", stud[x].Sex);
-            Console.WriteLine("\tQUIZ 1 SCORE: {0}", stud[x].Quiz1);
-            Console.WriteLine("\tQUIZ 2 SCORE: {0}", stud[x].Quiz2);
-            Console.WriteLine("\tASSIGNMENT SCORE: {0}", stud[x].Assignment);
-            Console.WriteLine("\tMID-TERM SCORE: {0}", stud[x].Midterm);
-            Console.WriteLine("\tFINAL SCORE: {0}", stud[x].Final);
-            Console.WriteLine("\tTOTAL SCORE: {0}", stud[x].Total);
-            Console.WriteLine();
+
+            studentGrades.showStudent(id);
+            
         }
 
-        static void updateStudent(Student[] stud, int count)
+        static void updateStudent(Student_Grades studentGrades)
         {
             Console.WriteLine("========================================================");
             Console.WriteLine();
@@ -183,8 +159,7 @@ namespace student_records_class
             Console.WriteLine();
             Console.WriteLine("Enter Student ID: ");
             string id = Console.ReadLine();
-            int x = findIndex(stud, id, count);
-            if (x == -1)
+            if (!studentGrades.findStudent(id))
             {
                 return;
             }
@@ -201,48 +176,48 @@ namespace student_records_class
             if (input == "1")
             {
                 Console.WriteLine("Enter Student's Name: ");
-                stud[x].Name = Console.ReadLine();
+                string updVal = Console.ReadLine();
+                studentGrades.updateStudentName(id, updVal);
             }
             if (input == "2")
             {
                 Console.WriteLine("Enter Student's Sex: ");
-                stud[x].Sex = Console.ReadLine();
+                string updVal = Console.ReadLine();
+                studentGrades.updateStudentSex(id, updVal);
             }
             if (input == "3")
             {
                 Console.WriteLine("Enter Student's Quiz 1 Score: ");
-                input = Console.ReadLine();
-                stud[x].Quiz1 = Convert.ToSingle(input);
+                float updVal = float.Parse(Console.ReadLine());
+                studentGrades.updateStudentQuiz1(id, updVal);
             }
             if (input == "4")
             {
                 Console.WriteLine("Enter Student's Quiz 2 Score: ");
-                input = Console.ReadLine();
-                stud[x].Quiz2 = Convert.ToSingle(input);
+                float updVal = float.Parse(Console.ReadLine());
+                studentGrades.updateStudentQuiz2(id, updVal);
             }
             if (input == "5")
             {
                 Console.WriteLine("Enter Student's Assignment Score: ");
-                input = Console.ReadLine();
-                stud[x].Assignment = Convert.ToSingle(input);
+                float updVal = float.Parse(Console.ReadLine());
+                studentGrades.updateStudentAssignment(id, updVal);
             }
             if (input == "6")
             {
                 Console.WriteLine("Enter Student's Mid-Term Score: ");
-                input = Console.ReadLine();
-                stud[x].Midterm = Convert.ToSingle(input);
+                float updVal = float.Parse(Console.ReadLine());
+                studentGrades.updateStudentMidterm(id, updVal);
             }
             if (input == "7")
             {
                 Console.WriteLine("Enter Student's Final Score: ");
-                input = Console.ReadLine();
-                stud[x].Final = Convert.ToSingle(input);
+                float updVal = float.Parse(Console.ReadLine());
+                studentGrades.updateStudentFinal(id, updVal);
             }
-
-            stud[x].addTotal();
         }
 
-        static void averageScore(Student[] stud, int count)
+        static void averageScore(Student_Grades studentGrades)
         {
             Console.WriteLine("========================================================");
             Console.WriteLine();
@@ -254,33 +229,17 @@ namespace student_records_class
             Console.WriteLine();
             Console.WriteLine("Enter Student ID: ");
             string id = Console.ReadLine();
-            int x = findIndex(stud, id, count);
-            if (x == -1)
+            if (!studentGrades.findStudent(id))
             {
                 return;
             }
-            float avg = 0;
-            avg = stud[x].Total / 5;
-            Console.WriteLine("The Average Score For Student {0} is: {1}", id, avg);
+
+            studentGrades.showStudentAvg(id);
+            
         }
 
-        static void maxTotalScore(Student[] stud, int count)
+        static void maxTotalScore(Student_Grades studentGrades)
         {
-            float max = -1;
-            string maxId = "";
-            for (int x = 0; x < count; x++)
-            {
-                if (stud[x].Total > max)
-                {
-                    max = stud[x].Total;
-                    maxId = stud[x].Id;
-                }
-            }
-            int index = findIndex(stud, maxId, count);
-            if (index == -1)
-            {
-                return;
-            }
             Console.WriteLine("========================================================");
             Console.WriteLine();
             Console.WriteLine();
@@ -289,36 +248,12 @@ namespace student_records_class
             Console.WriteLine();
             Console.WriteLine("========================================================");
             Console.WriteLine();
-            Console.WriteLine("Info For Student ID: {0}", stud[index].Id);
-            Console.WriteLine("\tNAME: {0}", stud[index].Name);
-            Console.WriteLine("\tSEX: {0}", stud[index].Sex);
-            Console.WriteLine("\tQUIZ 1 SCORE: {0}", stud[index].Quiz1);
-            Console.WriteLine("\tQUIZ 2 SCORE: {0}", stud[index].Quiz2);
-            Console.WriteLine("\tASSIGNMENT SCORE: {0}", stud[index].Assignment);
-            Console.WriteLine("\tMID-TERM SCORE: {0}", stud[index].Midterm);
-            Console.WriteLine("\tFINAL SCORE: {0}", stud[index].Final);
-            Console.WriteLine("\tTOTAL SCORE: {0}", stud[index].Total);
-            Console.WriteLine();
 
+            studentGrades.showMaxStudentScore();
         }
 
-        static void minTotalScore(Student[] stud, int count)
+        static void minTotalScore(Student_Grades studentGrades)
         {
-            float min = 999;
-            string minId = "";
-            for (int x = 0; x < count; x++)
-            {
-                if (stud[x].Total < min)
-                {
-                    min = stud[x].Total;
-                    minId = stud[x].Id;
-                }
-            }
-            int index = findIndex(stud, minId, count);
-            if (index == -1)
-            {
-                return;
-            }
             Console.WriteLine("========================================================");
             Console.WriteLine();
             Console.WriteLine();
@@ -327,20 +262,11 @@ namespace student_records_class
             Console.WriteLine();
             Console.WriteLine("========================================================");
             Console.WriteLine();
-            Console.WriteLine("Info For Student ID: {0}", stud[index].Id);
-            Console.WriteLine("\tNAME: {0}", stud[index].Name);
-            Console.WriteLine("\tSEX: {0}", stud[index].Sex);
-            Console.WriteLine("\tQUIZ 1 SCORE: {0}", stud[index].Quiz1);
-            Console.WriteLine("\tQUIZ 2 SCORE: {0}", stud[index].Quiz2);
-            Console.WriteLine("\tASSIGNMENT SCORE: {0}", stud[index].Assignment);
-            Console.WriteLine("\tMID-TERM SCORE: {0}", stud[index].Midterm);
-            Console.WriteLine("\tFINAL SCORE: {0}", stud[index].Final);
-            Console.WriteLine("\tTOTAL SCORE: {0}", stud[index].Total);
-            Console.WriteLine();
 
+            studentGrades.showMinStudentScore();
         }
 
-        static void deleteStudent(Student[] stud, ref int count)
+        static void deleteStudent(Student_Grades studentGrades)
         {
             Console.WriteLine("========================================================");
             Console.WriteLine();
@@ -352,75 +278,18 @@ namespace student_records_class
             Console.WriteLine();
             Console.WriteLine("Enter Student ID: ");
             string id = Console.ReadLine();
-            int x = findIndex(stud, id, count);
-            if (x == -1)
+            if (!studentGrades.findStudent(id))
             {
                 return;
             }
 
-            if (x == count - 1)
-            {
-                stud[x].Id = null;
-                stud[x].Name = null;
-                stud[x].Sex = null;
-                stud[x].Quiz1 = 0;
-                stud[x].Quiz2 = 0;
-                stud[x].Assignment = 0;
-                stud[x].Midterm = 0;
-                stud[x].Final = 0;
-                stud[x].addTotal();
-
-                count--;
-                return;
-            }
-
-            for (int y = x + 1; y < count; y++)
-            {
-                stud[y - 1] = stud[y];
-            }
-
-            stud[count - 1].Id = null;
-            stud[count - 1].Name = null;
-            stud[count - 1].Sex = null;
-            stud[count - 1].Quiz1 = 0;
-            stud[count - 1].Quiz2 = 0;
-            stud[count - 1].Assignment = 0;
-            stud[count - 1].Midterm = 0;
-            stud[count - 1].Final = 0;
-            stud[count - 1].addTotal();
-
-            count--;
+            studentGrades.deleteStudent(id);
 
         }
 
-        static void bubbleSortDesc(Student[] stud, int count)
+        static void sortStudents(Student_Grades studentGrades)
         {
-            Student temp = new Student();
-
-            for (int x = 0; x < count; x++)
-            {
-                for (int y = count - 1; y > x; y--)
-                {
-                    if (stud[y].Total > stud[x].Total)
-                    {
-                        temp = stud[x];
-                        stud[x] = stud[y];
-                        stud[y] = temp;
-                    }
-                }
-            }
-        }
-
-        static int findIndex(Student[] stud, string id, int count)
-        {
-            for (int x = 0; x < count; x++)
-            {
-                if (stud[x].Id == id)
-                {
-                    return x;
-                }
-            }
-            return -1;
+            studentGrades.sortStudents();
         }
     }
 }
