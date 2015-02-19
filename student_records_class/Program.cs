@@ -14,38 +14,45 @@ namespace student_records_class
 
             string selection = "";
 
-            while (selection != "x")
+            do
             {
                 buildMenu();
 
-                selection = Console.ReadLine();
-
-                switch (selection)
+                try
                 {
-                    case "1": addStudent(student_grades);
-                        break;
-                    case "2": deleteStudent(student_grades);
-                        break;
-                    case "3": updateStudent(student_grades);
-                        break;
-                    case "4": viewAllStudents(student_grades);
-                        break;
-                    case "5": averageScore(student_grades);
-                        break;
-                    case "6": maxTotalScore(student_grades);
-                        break;
-                    case "7":minTotalScore(student_grades);
-                        break;
-                    case "8": viewStudent(student_grades);
-                        break;
-                    case "9": sortStudents(student_grades);
-                        break;
-                    case "x": break;
-                    default: Console.WriteLine("Your selection is not valid: {0}", selection);
-                        break;
+                    selection = Console.ReadLine();
+                
+                    switch (selection)
+                    {
+                        case "1": addStudent(student_grades);
+                            break;
+                        case "2": deleteStudent(student_grades);
+                            break;
+                        case "3": updateStudent(student_grades);
+                            break;
+                        case "4": viewAllStudents(student_grades);
+                            break;
+                        case "5": averageScore(student_grades);
+                            break;
+                        case "6": maxTotalScore(student_grades);
+                            break;
+                        case "7": minTotalScore(student_grades);
+                            break;
+                        case "8": viewStudent(student_grades);
+                            break;
+                        case "9": sortStudents(student_grades);
+                            break;
+                        case "x": break;
+                        default: Console.WriteLine("Your selection is not valid: {0}", selection);
+                            break;
 
+                    }
                 }
-            }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            } while (selection != "x");
         }
 
         static void buildMenu()
@@ -89,24 +96,45 @@ namespace student_records_class
             Console.WriteLine();
             Console.WriteLine("========================================================");
             Console.WriteLine();
-            Console.WriteLine("Enter Student's ID: ");
-            string id = Console.ReadLine();
-            Console.WriteLine("Enter Student's Name: ");
-            string name = Console.ReadLine();
-            Console.WriteLine("Enter Student's Sex: ");
-            string sex = Console.ReadLine();
-            Console.WriteLine("Enter Student's Quiz 1 Score: ");
-            float quiz1 = float.Parse(Console.ReadLine());
-            Console.WriteLine("Enter Student's Quiz 2 Score: ");
-            float quiz2 = float.Parse(Console.ReadLine());
-            Console.WriteLine("Enter Student's Assignment Score: ");
-            float assignment = float.Parse(Console.ReadLine());
-            Console.WriteLine("Enter Student's Mid-Term Score: ");
-            float midterm = float.Parse(Console.ReadLine());
-            Console.WriteLine("Enter Student's Final Score: ");
-            float final = float.Parse(Console.ReadLine());
+            
+            try
+            {
+                string id = "", name = "", sex = "";
+                float quiz1 = 0, quiz2 = 0, assignment = 0, midterm = 0, final = 0;
 
-            studGrades.addStudent(id, name, sex, quiz1, quiz2, assignment, midterm, final);
+                do
+                {
+                    id = getId();
+
+                    if (studGrades.findStudent(id))
+                    {
+                        Console.WriteLine("Student Id already exists: {0}", id);
+                    }
+                } while (studGrades.findStudent(id));
+
+                name = getName();
+
+                sex = getSex();
+
+                quiz1 = getQuiz1();
+
+                quiz2 = getQuiz2();
+
+                assignment = getAssignment();
+
+                midterm = getMidterm();
+                
+                final = getFinal();
+
+                if (!studGrades.addStudent(id, name, sex, quiz1, quiz2, assignment, midterm, final))
+                {
+                    Console.WriteLine("Unable to add student");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
         }
 
@@ -121,7 +149,14 @@ namespace student_records_class
             Console.WriteLine("========================================================");
             Console.WriteLine();
 
-            studentGrades.showAllStudents();
+            try
+            {
+                studentGrades.showAllStudents();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             
         }
 
@@ -135,15 +170,23 @@ namespace student_records_class
             Console.WriteLine();
             Console.WriteLine("========================================================");
             Console.WriteLine();
-            Console.WriteLine("Enter Student ID: ");
-            string id = Console.ReadLine();
-            if (!studentGrades.findStudent(id))
-            {
-                Console.WriteLine("Student Not Found: {0}", id);
-                return;
-            }
 
-            studentGrades.showStudent(id);
+            try
+            {
+                string id = getId();
+
+                if (!studentGrades.findStudent(id))
+                {
+                    Console.WriteLine("Student Not Found: {0}", id);
+                    return;
+                }
+
+                studentGrades.showStudent(id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             
         }
 
@@ -157,63 +200,76 @@ namespace student_records_class
             Console.WriteLine();
             Console.WriteLine("========================================================");
             Console.WriteLine();
-            Console.WriteLine("Enter Student ID: ");
-            string id = Console.ReadLine();
-            if (!studentGrades.findStudent(id))
-            {
-                return;
-            }
-            Console.WriteLine("Which field do you want to update?");
-            Console.WriteLine("\t1. NAME: ");
-            Console.WriteLine("\t2. SEX: ");
-            Console.WriteLine("\t3. QUIZ 1 SCORE: ");
-            Console.WriteLine("\t4. QUIZ 2 SCORE: ");
-            Console.WriteLine("\t5. ASSIGNMENT SCORE: ");
-            Console.WriteLine("\t6. MID-TERM SCORE: ");
-            Console.WriteLine("\t7. FINAL SCORE: ");
-            string input = Console.ReadLine();
 
-            if (input == "1")
+            try
             {
-                Console.WriteLine("Enter Student's Name: ");
-                string updVal = Console.ReadLine();
-                studentGrades.updateStudentName(id, updVal);
+                string id = getId();
+                string fieldToUpdate = "";
+                string[] fieldChoices = new string[7]{"1","2","3","4","5","6","7"};
+                if (!studentGrades.findStudent(id))
+                {
+                    Console.WriteLine("Student Not Found: {0}", id);
+                    return;
+                }
+
+                studentGrades.showStudent(id);
+
+                do
+                {
+                    Console.WriteLine("Which field do you want to update?");
+                    Console.WriteLine("\t1. NAME: ");
+                    Console.WriteLine("\t2. SEX: ");
+                    Console.WriteLine("\t3. QUIZ 1 SCORE: ");
+                    Console.WriteLine("\t4. QUIZ 2 SCORE: ");
+                    Console.WriteLine("\t5. ASSIGNMENT SCORE: ");
+                    Console.WriteLine("\t6. MID-TERM SCORE: ");
+                    Console.WriteLine("\t7. FINAL SCORE: ");
+                    fieldToUpdate = Console.ReadLine();
+                    if (!fieldChoices.Contains(fieldToUpdate))
+                    {
+                        Console.WriteLine("Please choose 1-7.");
+                    }
+                } while (!fieldChoices.Contains(fieldToUpdate));
+
+                if (fieldToUpdate == "1")
+                {
+                    string updVal = getName();
+                    studentGrades.updateStudentName(id, updVal);
+                }
+                if (fieldToUpdate == "2")
+                {
+                    string updVal = getSex();
+                    studentGrades.updateStudentSex(id, updVal);
+                }
+                if (fieldToUpdate == "3")
+                {
+                    float updVal = getQuiz1();
+                    studentGrades.updateStudentQuiz1(id, updVal);
+                }
+                if (fieldToUpdate == "4")
+                {
+                    float updVal = getQuiz2();
+                    studentGrades.updateStudentQuiz2(id, updVal);
+                }
+                if (fieldToUpdate == "5")
+                {
+                    float updVal = getAssignment();
+                    studentGrades.updateStudentAssignment(id, updVal);
+                }
+                if (fieldToUpdate == "6")
+                {
+                    float updVal = getMidterm();
+                    studentGrades.updateStudentMidterm(id, updVal);
+                }
+                if (fieldToUpdate == "7")
+                {
+                    float updVal = getFinal();
+                    studentGrades.updateStudentFinal(id, updVal);
+                }
             }
-            if (input == "2")
+            catch (Exception ex)
             {
-                Console.WriteLine("Enter Student's Sex: ");
-                string updVal = Console.ReadLine();
-                studentGrades.updateStudentSex(id, updVal);
-            }
-            if (input == "3")
-            {
-                Console.WriteLine("Enter Student's Quiz 1 Score: ");
-                float updVal = float.Parse(Console.ReadLine());
-                studentGrades.updateStudentQuiz1(id, updVal);
-            }
-            if (input == "4")
-            {
-                Console.WriteLine("Enter Student's Quiz 2 Score: ");
-                float updVal = float.Parse(Console.ReadLine());
-                studentGrades.updateStudentQuiz2(id, updVal);
-            }
-            if (input == "5")
-            {
-                Console.WriteLine("Enter Student's Assignment Score: ");
-                float updVal = float.Parse(Console.ReadLine());
-                studentGrades.updateStudentAssignment(id, updVal);
-            }
-            if (input == "6")
-            {
-                Console.WriteLine("Enter Student's Mid-Term Score: ");
-                float updVal = float.Parse(Console.ReadLine());
-                studentGrades.updateStudentMidterm(id, updVal);
-            }
-            if (input == "7")
-            {
-                Console.WriteLine("Enter Student's Final Score: ");
-                float updVal = float.Parse(Console.ReadLine());
-                studentGrades.updateStudentFinal(id, updVal);
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -227,14 +283,23 @@ namespace student_records_class
             Console.WriteLine();
             Console.WriteLine("========================================================");
             Console.WriteLine();
-            Console.WriteLine("Enter Student ID: ");
-            string id = Console.ReadLine();
-            if (!studentGrades.findStudent(id))
-            {
-                return;
-            }
 
-            studentGrades.showStudentAvg(id);
+            try
+            {
+                string id = getId();
+
+                if (!studentGrades.findStudent(id))
+                {
+                    Console.WriteLine("Student Not Found: {0}", id);
+                    return;
+                }
+
+                studentGrades.showStudentAvg(id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             
         }
 
@@ -249,7 +314,14 @@ namespace student_records_class
             Console.WriteLine("========================================================");
             Console.WriteLine();
 
-            studentGrades.showMaxStudentScore();
+            try
+            {
+                studentGrades.showMaxStudentScore();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         static void minTotalScore(Student_Grades studentGrades)
@@ -263,7 +335,14 @@ namespace student_records_class
             Console.WriteLine("========================================================");
             Console.WriteLine();
 
-            studentGrades.showMinStudentScore();
+            try
+            {
+                studentGrades.showMinStudentScore();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         static void deleteStudent(Student_Grades studentGrades)
@@ -276,20 +355,239 @@ namespace student_records_class
             Console.WriteLine();
             Console.WriteLine("========================================================");
             Console.WriteLine();
-            Console.WriteLine("Enter Student ID: ");
-            string id = Console.ReadLine();
-            if (!studentGrades.findStudent(id))
-            {
-                return;
-            }
 
-            studentGrades.deleteStudent(id);
+            try
+            {
+                string id = getId();
+
+                if (!studentGrades.findStudent(id))
+                {
+                    Console.WriteLine("Student Not Found: {0}", id);
+                    return;
+                }
+
+                studentGrades.deleteStudent(id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
         }
 
         static void sortStudents(Student_Grades studentGrades)
         {
             studentGrades.sortStudents();
+        }
+
+        static string getId()
+        {
+            string id = "";
+
+            do
+            {
+                Console.WriteLine("Enter Student's ID: ");
+                id = Console.ReadLine();
+                if (id == "")
+                {
+                    Console.WriteLine("Student ID cannot be blank.");
+                }
+            } while (id == "");
+
+            return id;
+        }
+
+        static string getName()
+        {
+            string name = "";
+
+            do
+            {
+                Console.WriteLine("Enter Student's Name: ");
+                name = Console.ReadLine();
+                if (name == "")
+                {
+                    Console.WriteLine("Student Name cannot be blank.");
+                }
+            } while (name == "");
+
+            return name;
+        }
+
+        static string getSex()
+        {
+            string sex = "";
+
+            do
+            {
+                Console.WriteLine("Enter Student's Sex(m/f): ");
+                sex = Console.ReadLine();
+                if (sex == "")
+                {
+                    Console.WriteLine("Student Name cannot be blank.");
+                }
+                else if (sex != "m" && sex != "M" && sex != "f" && sex != "F")
+                {
+                    Console.WriteLine("Please enter M for Male or F for Female.");
+                }
+            } while (sex != "m" && sex != "M" && sex != "f" && sex != "F");
+
+            return sex.ToUpper();
+        }
+
+        static float getQuiz1()
+        {
+            string input = "";
+            float quiz1 = 0, f = 0;
+
+            do
+            {
+                input = "";
+                Console.WriteLine("Enter Student's Quiz 1 Score: ");
+                input = Console.ReadLine();
+                if (float.TryParse(input, out f))
+                {
+                    quiz1 = f;
+                }
+                else
+                {
+                    if (input == "")
+                    {
+                        quiz1 = f;
+                        input = f.ToString();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please enter a numeric value.");
+                    }
+                }
+            } while (!float.TryParse(input, out f));
+
+            return quiz1;
+        }
+
+        static float getQuiz2()
+        {
+            string input = "";
+            float quiz2 = 0, f = 0;
+
+            do
+            {
+                input = "";
+                Console.WriteLine("Enter Student's Quiz 2 Score: ");
+                input = Console.ReadLine();
+                if (float.TryParse(input, out f))
+                {
+                    quiz2 = f;
+                }
+                else
+                {
+                    if (input == "")
+                    {
+                        quiz2 = f;
+                        input = f.ToString();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please enter a numeric value.");
+                    }
+                }
+            } while (!float.TryParse(input, out f));
+
+            return quiz2;
+        }
+
+        static float getAssignment()
+        {
+            string input = "";
+            float assignment = 0, f = 0;
+
+            do
+            {
+                input = "";
+                Console.WriteLine("Enter Student's Assignment Score: ");
+                input = Console.ReadLine();
+                if (float.TryParse(input, out f))
+                {
+                    assignment = f;
+                }
+                else
+                {
+                    if (input == "")
+                    {
+                        assignment = f;
+                        input = f.ToString();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please enter a numeric value.");
+                    }
+                }
+            } while (!float.TryParse(input, out f));
+
+            return assignment;
+        }
+
+        static float getMidterm()
+        {
+            string input = "";
+            float midterm = 0, f = 0;
+
+            do
+            {
+                input = "";
+                Console.WriteLine("Enter Student's Midterm Score: ");
+                input = Console.ReadLine();
+                if (float.TryParse(input, out f))
+                {
+                    midterm = f;
+                }
+                else
+                {
+                    if (input == "")
+                    {
+                        midterm = f;
+                        input = f.ToString();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please enter a numeric value.");
+                    }
+                }
+            } while (!float.TryParse(input, out f));
+
+            return midterm;
+        }
+
+        static float getFinal()
+        {
+            string input = "";
+            float final = 0, f = 0;
+
+            do
+            {
+                input = "";
+                Console.WriteLine("Enter Student's Final Score: ");
+                input = Console.ReadLine();
+                if (float.TryParse(input, out f))
+                {
+                    final = f;
+                }
+                else
+                {
+                    if (input == "")
+                    {
+                        final = f;
+                        input = f.ToString();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please enter a numeric value.");
+                    }
+                }
+            } while (!float.TryParse(input, out f));
+
+            return final;
         }
     }
 }
