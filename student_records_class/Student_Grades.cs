@@ -102,11 +102,11 @@ namespace student_records_class
             get { return this.studentCount; }
         }
 
-        public void addStudent(string id, string name, string sex, float quiz1, float quiz2, float assignment, float midterm, float final)
+        public bool addStudent(string id, string name, string sex, float quiz1, float quiz2, float assignment, float midterm, float final)
         {
             if (this.studentCount > 19)
             {
-                return;
+                return false;
             }
 
             Student newStud = new Student();
@@ -124,6 +124,8 @@ namespace student_records_class
             this.students[this.studentCount] = newStud;
 
             this.studentCount++;
+
+            return true;
         }
 
         public void updateStudentName(string studId, string updValue)
