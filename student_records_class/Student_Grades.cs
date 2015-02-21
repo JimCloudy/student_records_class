@@ -18,7 +18,6 @@ namespace student_records_class
             private float assignment;
             private float midterm;
             private float final;
-            private float total;
 
             public string Id
             {
@@ -70,12 +69,7 @@ namespace student_records_class
 
             public float Total
             {
-                get { return this.total; }
-            }
-
-            public void addTotal()
-            {
-                this.total = this.quiz1 + this.quiz2 + this.assignment + this.midterm + this.final;
+                get { return this.quiz1 + this.quiz2 + this.assignment + this.midterm + this.final; }
             }
 
             public override string ToString()
@@ -88,27 +82,38 @@ namespace student_records_class
                 data += String.Format("\n\tASSIGNMENT SCORE: {0}", this.assignment);
                 data += String.Format("\n\tMID-TERM SCORE: {0}", this.midterm);
                 data += String.Format("\n\tFINAL SCORE: {0}", this.final);
-                data += String.Format("\n\tTOTAL SCORE: {0}", this.total);
+                data += String.Format("\n\tTOTAL SCORE: {0}", this.Total);
                 data += String.Format("\n");
                 return data;
             }
+
+            public override bool Equals(Object obj)
+            {
+                if(obj == null || GetType() !=  obj.GetType())
+                {
+                    return false;
+                }
+
+                Student stud = (Student)obj;
+
+                if (stud.Id == null)
+                {
+                    return false;
+                }
+
+                return this.id.Equals(stud.Id);
+            }
+
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
+            }
         }
 
-        private Student[] students = new Student[20];
-        
-        private int studentCount = 0;
-
-        public int StudentCount{
-            get { return this.studentCount; }
-        }
+        private List<Student> students = new List<Student>();
 
         public bool addStudent(string id, string name, string sex, float quiz1, float quiz2, float assignment, float midterm, float final)
         {
-            if (this.studentCount > 19)
-            {
-                return false;
-            }
-
             Student newStud = new Student();
 
             newStud.Id = id;
@@ -119,178 +124,157 @@ namespace student_records_class
             newStud.Assignment = assignment;
             newStud.Midterm = midterm;
             newStud.Final = final;
-            newStud.addTotal();
 
-            this.students[this.studentCount] = newStud;
-
-            this.studentCount++;
+            this.students.Add(newStud);
 
             return true;
         }
 
         public void updateStudentName(string studId, string updValue)
         {
-            int index = this.findIndex(studId);
-            
-            if (index == -1)
+            if (!this.students.Exists(x => x.Id == studId))
             {
                 return;
             }
 
-            this.students[index].Name = updValue;
+            int index = this.students.FindIndex(x => x.Id == studId);
+
+            Student temp = this.students[index];
+            temp.Name = updValue;
+            this.students[index] = temp; 
         }
 
         public void updateStudentSex(string studId, string updValue)
         {
-            int index = this.findIndex(studId);
-
-            if (index == -1)
+            if (!this.students.Exists(x => x.Id == studId))
             {
                 return;
             }
 
-            this.students[index].Sex = updValue;
+            int index = this.students.FindIndex(x => x.Id == studId);
+
+            Student temp = this.students[index];
+            temp.Sex = updValue;
+            this.students[index] = temp;             
         }
 
         public void updateStudentQuiz1(string studId, float updValue)
         {
-            int index = this.findIndex(studId);
-
-            if (index == -1)
+            if (!this.students.Exists(x => x.Id == studId))
             {
                 return;
             }
 
-            this.students[index].Quiz1 = updValue;
-            this.students[index].addTotal();
+            int index = this.students.FindIndex(x => x.Id == studId);
+
+            Student temp = this.students[index];
+            temp.Quiz1 = updValue;
+            this.students[index] = temp; 
         }
 
         public void updateStudentQuiz2(string studId, float updValue)
         {
-            int index = this.findIndex(studId);
-
-            if (index == -1)
+            if (!this.students.Exists(x => x.Id == studId))
             {
                 return;
             }
 
-            this.students[index].Quiz2 = updValue;
-            this.students[index].addTotal();
+            int index = this.students.FindIndex(x => x.Id == studId);
+
+            Student temp = this.students[index];
+            temp.Quiz2 = updValue;
+            this.students[index] = temp; 
         }
 
         public void updateStudentAssignment(string studId, float updValue)
         {
-            int index = this.findIndex(studId);
-
-            if (index == -1)
+            if (!this.students.Exists(x => x.Id == studId))
             {
                 return;
             }
 
-            this.students[index].Assignment = updValue;
-            this.students[index].addTotal();
+            int index = this.students.FindIndex(x => x.Id == studId);
+
+            Student temp = this.students[index];
+            temp.Assignment = updValue;
+            this.students[index] = temp; 
         }
 
         public void updateStudentMidterm(string studId, float updValue)
         {
-            int index = this.findIndex(studId);
-
-            if (index == -1)
+            if (!this.students.Exists(x => x.Id == studId))
             {
                 return;
             }
 
-            this.students[index].Midterm = updValue;
-            this.students[index].addTotal();
+            int index = this.students.FindIndex(x => x.Id == studId);
+
+            Student temp = this.students[index];
+            temp.Midterm = updValue;
+            this.students[index] = temp; 
         }
 
         public void updateStudentFinal(string studId, float updValue)
         {
-            int index = this.findIndex(studId);
-
-            if (index == -1)
+            if (!this.students.Exists(x => x.Id == studId))
             {
                 return;
             }
 
-            this.students[index].Final = updValue;
-            this.students[index].addTotal();
+            int index = this.students.FindIndex(x => x.Id == studId);
+
+            Student temp = this.students[index];
+            temp.Final = updValue;
+            this.students[index] = temp; 
         }
 
         public void deleteStudent(string studId)
         {
-            int x = this.findIndex(studId);
-            if (x == -1)
-            {
-                return;
-            }
-
-            if (x == this.studentCount - 1)
-            {
-                this.students[x] = new Student();
-
-                this.studentCount--;
-
-                return;
-            }
-
-            for (int y = x + 1; y < this.studentCount; y++)
-            {
-                this.students[y - 1] = this.students[y];
-            }
-
-            this.students[this.studentCount - 1] = new Student();
-
-            this.studentCount--;
-
+            Student temp = new Student();
+            temp.Id = studId;
+            this.students.Remove(temp);
         }
 
         public void showStudent(string studId)
         {
-            int x = this.findIndex(studId);
-            if (x == -1)
+            if (this.students.Exists(x => x.Id == studId))
             {
-                return;
+                Console.WriteLine(this.students.Find(x => x.Id == studId));
             }
-
-            Console.WriteLine(this.students[x].ToString());
         }
 
         public void showAllStudents()
         {
-            for (int x = 0; x < this.studentCount; x++)
-            {
-                this.showStudent(this.students[x].Id);
+            foreach(Student stud in students){
+                Console.WriteLine(stud);
             }
         }
 
-        public void showStudentAvg(string id)
+        public void showStudentAvg(string studId)
         {
-            int x = this.findIndex(id);
-
-            if (x == -1)
+            if (!this.students.Exists(x => x.Id == studId))
             {
                 return;
             }
 
-            float avg = this.calcAvg(this.students[x]);
+            float avg = this.calcAvg(this.students.Find(x => x.Id == studId));
 
-            Console.WriteLine("Student {0} has an average score of {1}", this.students[x].Id, avg);
+            Console.WriteLine("Student {0} has an average score of {1}", studId, avg);
         }
 
         public void showMaxStudentScore()
         {
-            string id = this.findMaxScore();
+            Student stud = this.findMaxScore();
 
-            this.showStudent(id);
+            Console.WriteLine(stud);
 
         }
 
         public void showMinStudentScore()
         {
-            string id = this.findMinScore();
+            Student stud = this.findMinScore();
 
-            this.showStudent(id);
+            Console.WriteLine(stud);
         }
 
         private float calcAvg(Student stud)
@@ -298,78 +282,70 @@ namespace student_records_class
             return stud.Total / 5;
         }
 
-        private string findMaxScore()
+        private Student findMaxScore()
         {
-            float max = -1;
-            string maxId = "";
-            for (int x = 0; x < this.studentCount; x++)
+            Student max = new Student();
+
+            foreach (Student stud in this.students)
             {
-                if (this.students[x].Total > max)
+                if (max.Id == null)
                 {
-                    max = this.students[x].Total;
-                    maxId = this.students[x].Id;
+                    max = stud;
+                }
+                if (stud.Total > max.Total)
+                {
+                    max = stud;
                 }
             }
 
-            return maxId;
+            return max;
         }
 
-        private string findMinScore()
+        private Student findMinScore()
         {
-            float min = 999;
-            string minId = "";
-            for (int x = 0; x < this.studentCount; x++)
+            Student min = new Student();
+            
+            foreach(Student stud in this.students)
             {
-                if (this.students[x].Total < min)
+                if (min.Id == null)
                 {
-                    min = this.students[x].Total;
-                    minId = this.students[x].Id;
+                    min = stud;
+                }
+                if (stud.Total < min.Total)
+                {
+                    min = stud;
                 }
             }
 
-            return minId;
+            return min;
         }
 
         public void sortStudents()
         {
-            Student temp = new Student();
-
-            for (int x = 0; x < this.studentCount; x++)
-            {
-                for (int y = this.studentCount - 1; y > x; y--)
-                {
-                    if (this.students[y].Total > this.students[x].Total)
-                    {
-                        temp = this.students[x];
-                        this.students[x] = this.students[y];
-                        this.students[y] = temp;
-                    }
-                }
-            }
+            this.students.Sort(compareByTotalDesc);
         }
 
-        public bool findStudent(string id)
+        public bool findStudent(string studId)
         {
-            int x = this.findIndex(id);
-
-            if (x == -1)
-            {
-                return false;
-            }
-
-            return true;
+            return this.students.Exists(x => x.Id == studId);
         }
 
-        private int findIndex(string id)
+        private int compareByTotalDesc(Student stud1, Student stud2)
         {
-            for (int x = 0; x < this.studentCount; x++)
+            if (stud1.Total < stud2.Total)
             {
-                if (this.students[x].Id == id)
-                {
-                    return x;
-                }
+                return 1;
             }
-            return -1;
+
+            else if (stud1.Total == stud2.Total)
+            {
+                return 0;
+            }
+
+            else 
+            {
+                return -1;
+            }
         }
     }
 }
