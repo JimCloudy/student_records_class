@@ -57,6 +57,7 @@ namespace student_records_class
 
         static void buildMenu()
         {
+            Console.WriteLine();
             Console.WriteLine("========================================================");
             Console.WriteLine();
             Console.WriteLine();
@@ -151,6 +152,11 @@ namespace student_records_class
 
             try
             {
+                if (!studentGrades.hasStudents())
+                {
+                    Console.WriteLine("There are no students to view.");
+                    return;
+                }
                 studentGrades.showAllStudents();
             }
             catch (Exception ex)
@@ -173,6 +179,13 @@ namespace student_records_class
 
             try
             {
+
+                if (!studentGrades.hasStudents())
+                {
+                    Console.WriteLine("There are no students to view.");
+                    return;
+                }
+
                 string id = getId();
 
                 if (!studentGrades.findStudent(id))
@@ -203,6 +216,12 @@ namespace student_records_class
 
             try
             {
+                if (!studentGrades.hasStudents())
+                {
+                    Console.WriteLine("There are no students to update.");
+                    return;
+                }
+
                 string id = getId();
                 string fieldToUpdate = "";
                 string[] fieldChoices = new string[7]{"1","2","3","4","5","6","7"};
@@ -286,6 +305,12 @@ namespace student_records_class
 
             try
             {
+                if (!studentGrades.hasStudents())
+                {
+                    Console.WriteLine("There are no students to view.");
+                    return;
+                }
+
                 string id = getId();
 
                 if (!studentGrades.findStudent(id))
@@ -316,6 +341,12 @@ namespace student_records_class
 
             try
             {
+                if (!studentGrades.hasStudents())
+                {
+                    Console.WriteLine("There are no students to view.");
+                    return;
+                }
+
                 studentGrades.showMaxStudentScore();
             }
             catch (Exception ex)
@@ -337,6 +368,12 @@ namespace student_records_class
 
             try
             {
+                if (!studentGrades.hasStudents())
+                {
+                    Console.WriteLine("There are no students to view.");
+                    return;
+                }
+
                 studentGrades.showMinStudentScore();
             }
             catch (Exception ex)
@@ -358,6 +395,12 @@ namespace student_records_class
 
             try
             {
+                if (!studentGrades.hasStudents())
+                {
+                    Console.WriteLine("There are no students to delete.");
+                    return;
+                }
+
                 string id = getId();
 
                 if (!studentGrades.findStudent(id))
@@ -377,6 +420,13 @@ namespace student_records_class
 
         static void sortStudents(Student_Grades studentGrades)
         {
+            
+            if (!studentGrades.hasStudents())
+            {
+                Console.WriteLine("There are no students to sort.");
+                return;
+            }
+
             studentGrades.sortStudents();
         }
 
