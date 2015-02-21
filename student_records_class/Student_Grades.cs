@@ -347,5 +347,15 @@ namespace student_records_class
                 return -1;
             }
         }
+
+        public bool hasStudents()
+        {
+            if (this.students.Count == 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
